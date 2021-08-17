@@ -24,6 +24,7 @@ const (
 	EnvToken    = envNamespace + "TOKEN"
 	EnvKey      = envNamespace + "KEY"
 
+	EnvManagedDomain      = envNamespace + "MANAGED_DOMAIN"
 	EnvTTL                = envNamespace + "TTL"
 	EnvPropagationTimeout = envNamespace + "PROPAGATION_TIMEOUT"
 	EnvPollingInterval    = envNamespace + "POLLING_INTERVAL"
@@ -166,11 +167,17 @@ func (d *DNSProvider) Sequential() time.Duration {
 }
 
 func splitFqdn(fqdn string) (host, domain string) {
+	managedDomain := env.GetOrDefaultString(EnvManagedDomain, "")
+	if (managedDomain == "") {
 	parts := dns.SplitDomainName(fqdn)
 	length := len(parts)
 
 	host = strings.Join(parts[0:length-2], ".")
 	domain = strings.Join(parts[length-2:length], ".")
+	}
+	else {
+		
+	}
 	return
 }
 
